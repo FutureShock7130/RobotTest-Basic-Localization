@@ -4,11 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
-import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -19,22 +15,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-  double stickX;
-  double stickY;
-  double stickZ;
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
-  private Joystick m_stick = new Joystick(0);
-
-  public PWMTalonSRX m_leftFront = new PWMTalonSRX(13);
-  public PWMTalonSRX m_leftRear = new PWMTalonSRX(14);
-  public PWMTalonSRX m_rightFront = new PWMTalonSRX(11);
-  public PWMTalonSRX m_rightRear = new PWMTalonSRX(12);
-
-  public MecanumDrive drive = new MecanumDrive(m_leftFront, m_leftRear, m_rightFront, m_rightRear);
-
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -75,6 +58,13 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    /*
+     * String autoSelected = SmartDashboard.getString("Auto Selector",
+     * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
+     * = new MyAutoCommand(); break; case "Default Auto": default:
+     * autonomousCommand = new ExampleCommand(); break; }
+     */
+
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -98,12 +88,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    stickX = m_stick.getRawAxis(0);
-    stickY = m_stick.getRawAxis(1);
-    stickZ = m_stick.getRawAxis(4);
-    drive.driveCartesian(stickY, stickX, stickZ);
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
@@ -113,5 +98,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    m_robotContainer.testDrive();
+  }
 }
